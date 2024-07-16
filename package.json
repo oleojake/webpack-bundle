@@ -54,7 +54,7 @@
     "*.{ts,tsx}": [
       "prettier --write"
     ],
-    "*.css": [
+    "*.{css,scss}": [
       "prettier --write"
     ]
   }
