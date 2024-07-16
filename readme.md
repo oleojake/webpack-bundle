@@ -52,7 +52,7 @@ También hemos definido el fichero **./src/declaration.d.ts** para declarar scss
 declare module "*.scss";
 ````
 Se han realizado otras configuraciones como un nuevo comando solo para ejecutar el chequeo de tipos, y otro comando para ejecutar el proceso de build de webpack en paralelo:
-````javascript
+````json
 "start": "run-p -l type-check:watch start:dev",
 "type-check": "tsc --noEmit",
 "type-check:watch": "npm run type-check -- --watch",
@@ -89,7 +89,7 @@ Se ha dividido la configuración de webpack en tres ficheros:
 Haciendo uso de la herramienta llamada **webpack-merge** se han configurado los ficheros haciendo uso de {merge}.
 
 Los scripts del package.json quedan por tanto así: 
-````javascript
+````json
 "scripts": {
 		"start": "run-p -l type-check:watch start:dev",
 		"type-check": "tsc --noEmit",
@@ -125,7 +125,7 @@ export default merge(prod, {
 });
 ````
 Añadimos el siguiente script en **pacjage.json** para ejecutarlo:
-````javascript
+````json
 "build:perf": "npm run type-check && webpack --config webpack.perf.js"
 ````
 ![BundleAnalyzer](./public/readme/webpack-bundle-analyzer.JPG)
@@ -154,3 +154,27 @@ optimization: {
 ![OptimizationVendor](./public/readme/optimization-vendor.JPG)
 
 ## Bonus Point
+### Configuración de Husky 🐶
+Se ha instalado Husky para formatear el texto {ts,tsx} o {css,scss} con Prettier cuando se realice un precommit.
+
+Para ello se han añadido los ficheros **.prettierrc.json** **.prettierignore**.
+
+En el package.json se ha añadido la configuración para lint-staged: 
+````json
+"lint-staged": {
+    "*.{ts,tsx}": [
+      "prettier --write"
+    ],
+    "*.{css,scss}": [
+      "prettier --write"
+    ]
+  }
+````
+Y la configuración en el **./husky/pre-commit**
+````
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+npx lint-staged
+````
+![HuskyPrecommit](./public/readme/husky-precommit.JPG)
